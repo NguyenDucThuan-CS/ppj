@@ -72,7 +72,10 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
     if(sourceID && desID)
     setDataCost((prev) => [...prev, {id: UUID.v4(),sourceID, desID, cost}])
   }
-
+  const renderOptionsForDes = () => {
+    if(sourceID === "") return products
+    return products.filter((item) => item.Id > parseInt(sourceID))
+  }
   useEffect(() => {
     setSourceId(itemEdit.sourceID)
     setDesId(itemEdit.desID)
@@ -121,7 +124,7 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
                  <option value={""} selected>
                 Open this select menu
               </option>
-              {products
+              {renderOptionsForDes()
                 .map((item, index) => {
                   return (
                     <option key={item.Id} value={item.Id}>

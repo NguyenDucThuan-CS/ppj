@@ -72,9 +72,11 @@ const Edit = () => {
             history('/add-new')
         }
     }
-      
   }
-
+  const renderOptionsForDes = () => {
+    if(sourceID === "") return products
+    return products.filter((item) => item.Id > parseInt(sourceID))
+  }
 
   return (
     <div className="container">
@@ -110,7 +112,7 @@ const Edit = () => {
             <option value={""}>
               Open this select menu
             </option>
-            {products.map((item, index) => {
+            {renderOptionsForDes().map((item, index) => {
               return (
                 <option key={item.Id} value={item.Id}>
                   {item.ItemName}
