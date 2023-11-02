@@ -54,8 +54,8 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
     if(sourceID && desID) {
         const filterData = data.filter(
             (item) =>
-              item.ParentId >= parseInt(sourceID) &&
-              item.ParentId <= parseInt(desID) 
+              item.Id >= parseInt(sourceID) &&
+              item.Id < parseInt(desID) 
           );
           setDataRender(filterData);
           const cost = filterData.reduce((total, item) => total + item.Cost, 0);

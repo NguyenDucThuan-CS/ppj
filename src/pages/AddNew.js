@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { renderItemById } from "./Home"
 import { actDeleteItem } from "../redux/modules/action"
 
-const HomeNew = () => {
+const AddNew = () => {
 
     const history = useNavigate()
     const dispatch = useDispatch();
@@ -55,4 +55,4 @@ const HomeNew = () => {
 }
 
 
-export default HomeNew
+export default AddNew

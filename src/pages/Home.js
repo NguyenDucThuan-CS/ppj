@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import data from "../data/data.json";
-import "./Home.css";
-import CustomModal from "./Modal";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
 export const renderItemById = (id) => {
   return data[Number(id) - 1];
 };
+
 const Home = () => {
-  const [dataCost, setDataCost] = useState([]);
-
-  const [show, setShow] = useState(false);
-  const [itemEdit, setItemEdit]  =  useState("")
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  const history = useNavigate();
   const filterProduct = () => {
     return data.filter((item) => item.TypeName === "Product");
   };
@@ -51,8 +46,6 @@ const Home = () => {
     return initObj;
   };
 
- 
-
   const renderItem = () => {
     const obj = arrangeItemByProduct();
     const res = [];
@@ -65,11 +58,18 @@ const Home = () => {
 
     return res;
   };
-  const handleDelete = (id) => {
-   setDataCost(dataCost.filter((item) => item.id !==  id))
-  }
+
   return (
     <div className="container">
+      <div className="d-flex flex-row gap-2 mt-2 mb-2">
+        <Button variant="primary" onClick={() => history("/add")}>
+          Add with modal
+        </Button>
+        <Button variant="primary" onClick={() => history("/add-new")}>
+          Add with newpage
+        </Button>
+      </div>
+
       <div className="d-flex flex-row gap-5">
         <table className="table table-striped-columns ">
           <thead>
@@ -113,54 +113,7 @@ const Home = () => {
             ))}
           </tbody>
         </table>
-
-        <div style={{ width: "120%" }}>
-          <div className="btn btn-primary mb-2" onClick={handleShow}>
-            Add new
-          </div>
-          <table className="table table-striped-columns">
-            <thead>
-              <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Source</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Cost</th>
-                <th scope="col">Tác vụ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataCost.map((item, index) => (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{renderItemById(item.sourceID).ItemName}</td>
-                  <td>{renderItemById(item.desID).ItemName}</td>
-                  <td>{item.cost}</td>
-                  <td>
-                    <span class="bi bi-trash" onClick={() => handleDelete(item.id)}></span>{" "}
-                    <span onClick = {() => {
-                      setItemEdit(item)
-                      setShow(true)
-                      }}>
-                      <i class="bi bi-pen"></i>
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
-
-      <CustomModal
-        products={filterProduct()}
-        show={show}
-        handleClose={handleClose}
-        handleShow={handleShow}
-        setDataCost={setDataCost}
-        itemEdit={itemEdit}
-        setItemEdit = {setItemEdit}
-        dataCost = {dataCost}
-      />
     </div>
   );
 };

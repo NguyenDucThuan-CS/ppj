@@ -40,13 +40,12 @@ const Edit = () => {
     
   }, [id])
 
-
   useEffect(() => {
     if(sourceID && desID) {
         const filterData = data.filter(
             (item) =>
-              item.ParentId >= parseInt(sourceID) &&
-              item.ParentId <= parseInt(desID) 
+              item.Id >= parseInt(sourceID) &&
+              item.Id < parseInt(desID) 
           );
           setDataRender(filterData);
           const cost = filterData.reduce((total, item) => total + item.Cost, 0);
@@ -65,12 +64,12 @@ const Edit = () => {
         if(checkType() === 'new')
         {
             dispatch(actAddItem({id: UUID.v4(),sourceID,desID,cost}))
-            history('/home-new')
+            history('/add-new')
         }
        
         else {
             dispatch(actEditItem({id,sourceID,desID,cost}))
-            history('/home-new')
+            history('/add-new')
         }
     }
       
