@@ -1,16 +1,24 @@
-import React from "react";
-import data from "../data/data.json";
-import { Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
-export const renderItemById = (id) => {
-  return data[Number(id) - 1];
-};
-
+import { useSelector, useDispatch } from "react-redux";
+import { actAddData } from "../redux/masterData/action";
+import { actDeleteData } from "../redux/masterData/action";
+import { actEditData } from "../redux/masterData/action";
 const Home = () => {
   const history = useNavigate();
+  const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
+
+  const [name, setName] = useState("")
+  const [type, setType] = useState("")
+  const [id, setId] = useState("")
+  const [mode, setMode] = useState('')
+
+  const { masterData } = useSelector((state) => state.masterDataReducer);
+  
   const filterProduct = () => {
-    return data.filter((item) => item.TypeName === "Product");
+    return masterData.filter((item) => item.TypeName === "Product");
   };
 
   const checkItemIsProduct = (id) => {
@@ -21,43 +29,39 @@ const Home = () => {
     if (index === -1) return false;
     return true;
   };
-
-  const makeObj = () => {
-    const products = filterProduct();
-    const res = {};
-    for (let i = 0; i < products.length; i++) {
-      res[products[i].Id] = [];
-    }
-
-    return res;
+  const handleClose = () => {
+    setShow(false);
+    setId("")
+    setId("")
+    setType("")
   };
 
-  const arrangeItemByProduct = () => {
-    const initObj = makeObj();
-
-    for (const property in initObj) {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].ParentId == property) {
-          initObj[property].push(data[i].Id);
-        }
-      }
+  const handleClick = () => {
+    setShow(false)
+    if(mode === 'NEW') {
+      dispatch(actAddData({
+        ParentId: id,
+        ItemName: name,
+        TypeName: type
+      }))
     }
-
-    return initObj;
-  };
-
-  const renderItem = () => {
-    const obj = arrangeItemByProduct();
-    const res = [];
-    for (const property in obj) {
-      res.push(property);
-      for (let i = 0; i < obj[property].length; i++) {
-        res.push(obj[property][i]);
-      }
+    else if(mode === 'EDIT') {
+      dispatch(actEditData({
+        id,
+        name,
+        type
+      }))
     }
+    
+  }
 
-    return res;
-  };
+  const setValueModal = (id) => {
+    const res =  masterData.find((item) => item.Id === id)
+    setId(id)
+    setName(res.ItemName)
+    setType(res.TypeName)
+  }
+
 
   return (
     <div className="container">
@@ -86,12 +90,12 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {renderItem().map((id, index) => (
+            {masterData.map((item, index) => (
               <tr key={index}>
                 <td
                   style={{
                     background: `${
-                      checkItemIsProduct(id) ? "yellow" : "unset"
+                      checkItemIsProduct(item.Id) ? "yellow" : "unset"
                     }`,
                   }}
                 >
@@ -100,27 +104,49 @@ const Home = () => {
                 <td
                   style={{
                     background: `${
-                      checkItemIsProduct(id) ? "yellow" : "unset"
+                      checkItemIsProduct(item.Id) ? "yellow" : "unset"
                     }`,
                   }}
                 >
-                  {renderItemById(id).ItemName}
+                  {item.ItemName}
                 </td>
                 <td
                   style={{
                     background: `${
-                      checkItemIsProduct(id) ? "yellow" : "unset"
+                      checkItemIsProduct(item.Id) ? "yellow" : "unset"
                     }`,
                   }}
                 >
-                  {renderItemById(id).TypeName}
+                  {item.TypeName}
                 </td>
                 <td>
-                  <span
-                    class="bi bi-trash"
-                  ></span>{" "}
-                  {checkItemIsProduct(id) && (
-                    <span>
+                  {!checkItemIsProduct(item.Id) && (
+                    <>
+                      <span
+                      class="bi bi-trash"
+                      onClick={() => dispatch(actDeleteData(item.Id))}
+                    ></span>
+                     <span
+                    onClick={() => {
+                      //setItemEdit(item);
+                      setValueModal(item.Id)
+                      setShow(true);
+                      setMode('EDIT')
+                    }}
+                  >
+                    <i class="bi bi-pen"></i>
+                  </span>
+                    </>
+                    
+                  )}
+                  {checkItemIsProduct(item.Id) && (
+                    <span
+                      onClick={() => {
+                        setShow(true);
+                        setId(item.Id)
+                        setMode("NEW")
+                      }}
+                    >
                       <i class="bi bi-plus-circle"></i>
                     </span>
                   )}
@@ -130,6 +156,30 @@ const Home = () => {
           </tbody>
         </table>
       </div>
+      <Modal
+        size="lg"
+        show={show}
+        onHide={() => {
+          handleClose();
+        }}
+      >
+        <Modal.Body>
+          <div className="container" style={{width:'50%'}}>
+            <label>Name</label>
+            <input class="form-control" onChange={(e) => setName(e.target.value)} value={name}/>
+            <label>Type</label>
+            <input class="form-control" onChange={(e) => setType(e.target.value)} value={type}/>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="primary"
+            onClick={handleClick}
+          >
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

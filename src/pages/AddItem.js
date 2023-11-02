@@ -1,23 +1,28 @@
 import React, { useState } from "react";
-import data from "../data/data.json";
+//import data from "../data/data.json";
 import CustomModal from "./Modal";
+import { useSelector } from "react-redux";
 
-export const renderItemById = (id) => {
-  return data[Number(id) - 1];
-};
+
 
 const AddItem = () => {
   const [dataCost, setDataCost] = useState([]);
 
   const [show, setShow] = useState(false);
   const [itemEdit, setItemEdit] = useState("");
-
+  const { masterData } = useSelector((state) => state.masterDataReducer);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const filterProduct = () => {
-    return data.filter((item) => item.TypeName === "Product");
+    return masterData.filter((item) => item.TypeName === "Product");
   };
+  
+  
+  const renderItemById = (id) => {
+    return masterData[Number(id) - 1];
+  };
+ 
 
   const handleDelete = (id) => {
     setDataCost(dataCost.filter((item) => item.id !== id));

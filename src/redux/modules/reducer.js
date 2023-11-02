@@ -21,7 +21,6 @@ const itemReducer = (state = initialState, action) => {
       state.data[index].desID = editItem.desID
       state.data[index].cost = editItem.cost
 
-
       return { ...state };
 
     default:

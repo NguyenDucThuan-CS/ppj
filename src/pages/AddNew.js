@@ -1,19 +1,21 @@
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { renderItemById } from "./Home"
+
 import { actDeleteItem } from "../redux/modules/action"
 
 const AddNew = () => {
-
+  
     const history = useNavigate()
     const dispatch = useDispatch();
     const dataRender = useSelector((state) => state.itemReducer.data);
-    
+    const {masterData} = useSelector((state) => state.masterDataReducer);
     const handleDelete = (id) => {
         dispatch(actDeleteItem(id))
     }
 
-
+    const renderItemById = (id) => {
+      return masterData[Number(id) - 1];
+    };
     return  <div className="container">
     <div className="d-flex flex-row gap-5">
       <div style={{ width: "120%" }}>

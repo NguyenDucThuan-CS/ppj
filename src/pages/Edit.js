@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
-import data from "../data/data.json";
+//import data from "../data/data.json";
 import { useDispatch, useSelector } from "react-redux";
 import { actAddItem } from "../redux/modules/action";
 import { actEditItem } from "../redux/modules/action";
@@ -12,8 +12,10 @@ const Edit = () => {
   const [desID, setDesId] = useState("");
   const [cost, setCost] = useState(0);
   const [dataRender, setDataRender] = useState([]);
-
-  const [masterData, setMasterData] = useState(data);
+  const { masterData: MasterData } = useSelector(
+    (state) => state.masterDataReducer
+  );
+  const [masterData, setMasterData] = useState(MasterData);
 
   const dispatch = useDispatch();
   const history = useNavigate();
@@ -95,8 +97,8 @@ const Edit = () => {
     const cloneMasterData = [...masterData];
     const index = cloneMasterData.findIndex((item) => item.Id === id);
 
-    return cloneMasterData[index].cost
-  }
+    return cloneMasterData[index].cost;
+  };
   return (
     <div className="container">
       <div className="d-flex mb-4">
