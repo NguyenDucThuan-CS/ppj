@@ -1,23 +1,34 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import data from "../data/data.json";
-import {default as UUID} from "node-uuid";
+//import data from "../data/data.json";
+import { default as UUID } from "node-uuid";
+import { useSelector } from "react-redux";
 
-
-const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemEdit, setItemEdit }) => {
-
+const CustomModal = ({
+  show,
+  handleClose,
+  products,
+  setDataCost,
+  dataCost,
+  itemEdit,
+  setItemEdit,
+}) => {
   const [sourceID, setSourceId] = useState("");
   const [desID, setDesId] = useState("");
   const [dataRender, setDataRender] = useState([]);
-  const [cost, setCost] = useState(0)
+  const [cost, setCost] = useState(0);
 
+  const { masterData: MasterData } = useSelector(
+    (state) => state.masterDataReducer
+  );
+  const [masterData, setMasterData] = useState(MasterData);
   const clearData = () => {
     setDataRender([]);
-    setSourceId("")
-    setDesId("")
-    setItemEdit("")
-    setCost(0)
+    setSourceId("");
+    setDesId("");
+    setItemEdit("");
+    setCost(0);
   };
 
   const handleChangeSource = (e) => {
@@ -27,60 +38,82 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
   const handleChangeDes = (e) => {
     setDesId(e.target.value);
   };
-  
+  const handleChangeCost = (id, value) => {
+    const cloneMasterData = [...masterData];
+    const index = cloneMasterData.findIndex((item) => item.Id === id);
+    cloneMasterData[index].cost = parseInt(value);
+
+    setMasterData(cloneMasterData);
+  };
+
+  const renderCostForOne = (id) => {
+    const cloneMasterData = [...masterData];
+    const index = cloneMasterData.findIndex((item) => item.Id === id);
+
+    return cloneMasterData[index].cost;
+  };
+
   const handleEdit = (id) => {
-   const cloneDataCost = [...dataCost]
-   const index = dataCost.findIndex((item) => item.id == id)
+    const cloneDataCost = [...dataCost];
+    const index = dataCost.findIndex((item) => item.id == id);
 
-   cloneDataCost[index].sourceID = sourceID
-   cloneDataCost[index].desID = desID
-   cloneDataCost[index].cost = cost
+    cloneDataCost[index].sourceID = sourceID;
+    cloneDataCost[index].desID = desID;
+    cloneDataCost[index].cost = cost;
 
-   setDataCost(cloneDataCost)
-  }
+    setDataCost(cloneDataCost);
+  };
 
   const handleClick = () => {
-    if(itemEdit) {
-      handleEdit(itemEdit.id)
-    }
-    else {
-      add()
+    if (itemEdit) {
+      handleEdit(itemEdit.id);
+    } else {
+      add();
     }
     handleClose();
     clearData();
-  }
+  };
 
   useEffect(() => {
-    if(sourceID && desID) {
-        const filterData = data.filter(
-            (item) =>
-              item.Id >= parseInt(sourceID) &&
-              item.Id < parseInt(desID) 
-          );
-          setDataRender(filterData);
-          const cost = filterData.reduce((total, item) => total + item.Cost, 0);
-          setCost(cost)
+    if (sourceID && desID) {
+      const filterData = masterData.filter(
+        (item) => item.Id >= parseInt(sourceID) && item.Id < parseInt(desID)
+      );
+      setDataRender(filterData);
+      // const cost = filterData.reduce((total, item) => total + item.Cost, 0);
+      // setCost(cost)
+    } else {
+      setDataRender([]);
+      setCost(0);
     }
-    else {
-        setDataRender([])
-        setCost(0)
-    }
-   
   }, [sourceID, desID]);
+  const renderCost = () => {
+    const filterData = masterData.filter(
+      (item) => item.Id >= parseInt(sourceID) && item.Id < parseInt(desID)
+    );
 
+    const cost = filterData.reduce((total, item) => {
+      if (item.cost !== undefined) return total + item.cost;
+    }, 0);
+
+    return cost;
+  };
   const add = () => {
-    if(sourceID && desID)
-    setDataCost((prev) => [...prev, {id: UUID.v4(),sourceID, desID, cost}])
-  }
+    if (sourceID && desID)
+      setDataCost((prev) => [
+        ...prev,
+        { id: UUID.v4(), sourceID, desID, cost: renderCost() },
+      ]);
+  };
   const renderOptionsForDes = () => {
-    if(sourceID === "") return products
-    return products.filter((item) => item.Id > parseInt(sourceID))
-  }
+    if (sourceID === "") return products;
+    return products.filter((item) => item.Id > parseInt(sourceID));
+  };
   useEffect(() => {
-    setSourceId(itemEdit.sourceID)
-    setDesId(itemEdit.desID)
-    setCost(itemEdit.cost)
-  }, [itemEdit])
+    setSourceId(itemEdit.sourceID);
+    setDesId(itemEdit.desID);
+    setCost(itemEdit.cost);
+  }, [itemEdit]);
 
   return (
     <>
@@ -101,7 +134,7 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
               onChange={handleChangeSource}
               value={sourceID}
             >
-                 <option value={""} selected>
+              <option value={""} selected>
                 Open this select menu
               </option>
               {products.map((item, index) => {
@@ -121,17 +154,16 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
               onChange={handleChangeDes}
               value={desID}
             >
-                 <option value={""} selected>
+              <option value={""} selected>
                 Open this select menu
               </option>
-              {renderOptionsForDes()
-                .map((item, index) => {
-                  return (
-                    <option key={item.Id} value={item.Id}>
-                      {item.ItemName}
-                    </option>
-                  );
-                })}
+              {renderOptionsForDes().map((item, index) => {
+                return (
+                  <option key={item.Id} value={item.Id}>
+                    {item.ItemName}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </Modal.Header>
@@ -151,21 +183,26 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
                   <td>{index + 1}</td>
                   <td>{item.ItemName}</td>
                   <td>{item.TypeName}</td>
-                  <td><input onChange={() => console.log('12')}/></td>
+                  <td>
+                    <input
+                      type="number"
+                      onChange={(e) =>
+                        handleChangeCost(item.Id, e.target.value)
+                      }
+                      value={renderCostForOne(item.Id)}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="primary"
-            onClick={handleClick}
-          >
+          <Button variant="primary" onClick={handleClick}>
             Save
           </Button>
         </Modal.Footer>
-        <p className="text-end fw-bold p-2">Total Cost: {cost}</p>
+        <p className="text-end fw-bold p-2">Total Cost: {renderCost()}</p>
       </Modal>
     </>
   );
