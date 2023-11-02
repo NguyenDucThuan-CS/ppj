@@ -5,16 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { actAddItem } from "../redux/modules/action";
 import { actEditItem } from "../redux/modules/action";
 import { useNavigate, useParams } from "react-router-dom";
-import {default as UUID} from "node-uuid";
+import { default as UUID } from "node-uuid";
 
 const Edit = () => {
   const [sourceID, setSourceId] = useState("");
   const [desID, setDesId] = useState("");
-  const [cost, setCost] = useState(0)
+  const [cost, setCost] = useState(0);
   const [dataRender, setDataRender] = useState([]);
-  
-  const dispatch = useDispatch()
-  const history = useNavigate()
+
+  const [masterData, setMasterData] = useState(data);
+
+  const dispatch = useDispatch();
+  const history = useNavigate();
   const dataCost = useSelector((state) => state.itemReducer.data);
 
   const handleChangeSource = (e) => {
@@ -26,58 +28,75 @@ const Edit = () => {
   };
 
   const checkType = () => {
-    return window.location.pathname.split('/')[1]
-  }
+    return window.location.pathname.split("/")[1];
+  };
   const { id } = useParams();
 
   useEffect(() => {
-    if(checkType() === 'edit') {
-        const item = dataCost.find((item) => item.id === id)
-        setSourceId(item.sourceID)
-        setDesId(item.desID)
-        setCost(item.cost)
+    if (checkType() === "edit") {
+      const item = dataCost.find((item) => item.id === id);
+      setSourceId(item.sourceID);
+      setDesId(item.desID);
+      setCost(item.cost);
     }
-    
-  }, [id])
+  }, [id]);
 
   useEffect(() => {
-    if(sourceID && desID) {
-        const filterData = data.filter(
-            (item) =>
-              item.Id >= parseInt(sourceID) &&
-              item.Id < parseInt(desID) 
-          );
-          setDataRender(filterData);
-          const cost = filterData.reduce((total, item) => total + item.Cost, 0);
-          setCost(cost)
+    if (sourceID && desID) {
+      const filterData = masterData.filter(
+        (item) => item.Id >= parseInt(sourceID) && item.Id < parseInt(desID)
+      );
+      setDataRender(filterData);
+    } else {
+      setDataRender([]);
+      setCost(0);
     }
-    else {
-        setDataRender([])
-        setCost(0)
-    }
-   
   }, [sourceID, desID]);
-  const products = data.filter((item) => item.TypeName === "Product")
-  
-  const handleClick = () => {
-    if(sourceID && desID) {
-        if(checkType() === 'new')
-        {
-            dispatch(actAddItem({id: UUID.v4(),sourceID,desID,cost}))
-            history('/add-new')
-        }
-       
-        else {
-            dispatch(actEditItem({id,sourceID,desID,cost}))
-            history('/add-new')
-        }
-    }
-  }
-  const renderOptionsForDes = () => {
-    if(sourceID === "") return products
-    return products.filter((item) => item.Id > parseInt(sourceID))
-  }
 
+  const renderCost = () => {
+    const filterData = masterData.filter(
+      (item) => item.Id >= parseInt(sourceID) && item.Id < parseInt(desID)
+    );
+
+    const cost = filterData.reduce((total, item) => {
+      if (item.cost !== undefined) return total + item.cost;
+    }, 0);
+
+    return cost;
+  };
+
+  const products = masterData.filter((item) => item.TypeName === "Product");
+
+  const handleClick = () => {
+    if (sourceID && desID) {
+      if (checkType() === "new") {
+        dispatch(
+          actAddItem({ id: UUID.v4(), sourceID, desID, cost: renderCost() })
+        );
+        history("/add-new");
+      } else {
+        dispatch(actEditItem({ id, sourceID, desID, cost: renderCost() }));
+        history("/add-new");
+      }
+    }
+  };
+  const renderOptionsForDes = () => {
+    if (sourceID === "") return products;
+    return products.filter((item) => item.Id > parseInt(sourceID));
+  };
+  const handleChangeCost = (id, value) => {
+    const cloneMasterData = [...masterData];
+    const index = cloneMasterData.findIndex((item) => item.Id === id);
+    cloneMasterData[index].cost = parseInt(value);
+
+    setMasterData(cloneMasterData);
+  };
+  const renderCostForOne = (id) => {
+    const cloneMasterData = [...masterData];
+    const index = cloneMasterData.findIndex((item) => item.Id === id);
+
+    return cloneMasterData[index].cost
+  }
   return (
     <div className="container">
       <div className="d-flex mb-4">
@@ -89,9 +108,7 @@ const Edit = () => {
             onChange={handleChangeSource}
             value={sourceID}
           >
-            <option value={""}>
-              Open this select menu
-            </option>
+            <option value={""}>Open this select menu</option>
             {products.map((item, index) => {
               return (
                 <option key={item.Id} value={item.Id}>
@@ -109,9 +126,7 @@ const Edit = () => {
             onChange={handleChangeDes}
             value={desID}
           >
-            <option value={""}>
-              Open this select menu
-            </option>
+            <option value={""}>Open this select menu</option>
             {renderOptionsForDes().map((item, index) => {
               return (
                 <option key={item.Id} value={item.Id}>
@@ -134,11 +149,17 @@ const Edit = () => {
           </thead>
           <tbody>
             {dataRender.map((item, index) => (
-              <tr key = {index}>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{item.ItemName}</td>
                 <td>{item.TypeName}</td>
-                <td>{item.Cost}</td>
+                <td>
+                  <input
+                    type="number"
+                    onChange={(e) => handleChangeCost(item.Id, e.target.value)}
+                    value={renderCostForOne(item.Id)}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -149,7 +170,7 @@ const Edit = () => {
           Save
         </Button>
       </div>
-      <p className="text-end fw-bold p-2">Total Cost: {cost}</p>
+      <p className="text-end fw-bold p-2">Total Cost: {renderCost()}</p>
     </div>
   );
 };

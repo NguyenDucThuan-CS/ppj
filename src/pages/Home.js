@@ -61,13 +61,18 @@ const Home = () => {
 
   return (
     <div className="container">
-      <div className="d-flex flex-row gap-2 mt-2 mb-2">
-        <Button variant="primary" onClick={() => history("/add")}>
-          Add with modal
-        </Button>
-        <Button variant="primary" onClick={() => history("/add-new")}>
-          Add with newpage
-        </Button>
+      <div className="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between">
+        <div>
+          <Button variant="primary">Add Product</Button>
+        </div>
+        <div className="d-flex flex-row gap-2">
+          <Button variant="primary" onClick={() => history("/add")}>
+            Add with modal
+          </Button>
+          <Button variant="primary" onClick={() => history("/add-new")}>
+            Add with newpage
+          </Button>
+        </div>
       </div>
 
       <div className="d-flex flex-row gap-5">
@@ -77,6 +82,7 @@ const Home = () => {
               <th scope="col">No.</th>
               <th scope="col">Item</th>
               <th scope="col">Type</th>
+              <th scope="col">Tác vụ</th>
             </tr>
           </thead>
           <tbody>
@@ -108,6 +114,16 @@ const Home = () => {
                   }}
                 >
                   {renderItemById(id).TypeName}
+                </td>
+                <td>
+                  <span
+                    class="bi bi-trash"
+                  ></span>{" "}
+                  {checkItemIsProduct(id) && (
+                    <span>
+                      <i class="bi bi-plus-circle"></i>
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}

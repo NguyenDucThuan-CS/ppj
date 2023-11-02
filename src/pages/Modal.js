@@ -151,7 +151,7 @@ const CustomModal = ({ show, handleClose, products, setDataCost, dataCost, itemE
                   <td>{index + 1}</td>
                   <td>{item.ItemName}</td>
                   <td>{item.TypeName}</td>
-                  <td>{item.Cost}</td>
+                  <td><input onChange={() => console.log('12')}/></td>
                 </tr>
               ))}
             </tbody>

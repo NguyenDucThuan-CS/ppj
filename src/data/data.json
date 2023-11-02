@@ -4,8 +4,7 @@
         "No": 1,
         "ItemName": "Fiber (bông)",
         "TypeName": "Product",
-        "ParentId": null,
-        "Cost": 140
+        "ParentId": null
         
     },
     {
@@ -13,143 +12,125 @@
         "No": 2,
         "ItemName": "Spinning - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 1,
-        "Cost": 40
+        "ParentId": 1
     },
     {
         "Id": 3,
         "No": 3,
         "ItemName": "Spinning - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 1,
-        "Cost": 30
+        "ParentId": 1
     },
     {
         "Id": 4,
         "No": 4,
         "ItemName": "Yarn (sợi)",
         "TypeName": "Product",
-        "ParentId": null,
-        "Cost": 140
+        "ParentId": null
     },
     {
         "Id": 5,
         "No": 5,
         "ItemName": "Weaving - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 4,
-        "Cost": 30
+        "ParentId": 4
     },
     {
         "Id": 6,
         "No": 6,
         "ItemName": "Weaving - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 4,
-        "Cost": 20
+        "ParentId": 4
     },
     {
         "Id": 7,
         "No": 7,
         "ItemName": "Greige Fabric (vải mộc)",
         "TypeName": "Product",
-        "ParentId": null,
-        "Cost": 140
+        "ParentId": null
     },
     {
         "Id": 8,
         "No": 8,
         "ItemName": "Dyeing - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 7,
-        "Cost": 20
+        "ParentId": 7
     },
     {
         "Id": 9,
         "No": 9,
         "ItemName": "Dyeing - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 7,
-        "Cost": 50
+        "ParentId": 7
     },
     {
         "Id": 10,
         "No": 10,
         "ItemName": "Color Fabric (vải màu)",
         "TypeName": "Product",
-        "ParentId": null,
-        "Cost": 30
+        "ParentId": null
     },
     {
         "Id": 11,
         "No": 11,
         "ItemName": "Cutting - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 10,
-        "Cost": 20
+        "ParentId": 10
     },
     {
         "Id": 12,
         "No": 12,
         "ItemName": "Cutting - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 10,
-        "Cost": 30
+        "ParentId": 10
     },
     {
         "Id": 13,
         "No": 13,
         "ItemName": "Sewing - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 10,
-        "Cost": 10
+        "ParentId": 10
     },
     {
         "Id": 14,
         "No": 14,
         "ItemName": "Sewing - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 10,
-        "Cost": 80
+        "ParentId": 10
     },
     {
         "Id": 15,
         "No": 15,
         "ItemName": "Washing - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 10,
-        "Cost": 90
+        "ParentId": 10
     },
     {
         "Id": 16,
         "No": 16,
         "ItemName": "Washing - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 10,
-        "Cost": 100
+        "ParentId": 10
     },
     {
         "Id": 17,
         "No": 17,
         "ItemName": "Finishing - services",
         "TypeName": "Service (Dịch vụ)",
-        "ParentId": 10,
-        "Cost": 30
+        "ParentId": 10
     },
     {
         "Id": 18,
         "No": 18,
         "ItemName": "Finishing - materials",
         "TypeName": "Supplement Material (Phụ liệu)",
-        "ParentId": 10,
-        "Cost": 30
+        "ParentId": 10
     },
     {
         "Id": 19,
         "No": 19,
         "ItemName": "Garment (trang phục)",
         "TypeName": "Product",
-        "ParentId": null,
-        "Cost": 50
+        "ParentId": null
     }
 ]
