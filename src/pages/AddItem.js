@@ -19,51 +19,6 @@ const AddItem = () => {
     return data.filter((item) => item.TypeName === "Product");
   };
 
-  const checkItemIsProduct = (id) => {
-    const products = filterProduct();
-
-    const index = products.findIndex((item) => item.Id == id);
-
-    if (index === -1) return false;
-    return true;
-  };
-
-  const makeObj = () => {
-    const products = filterProduct();
-    const res = {};
-    for (let i = 0; i < products.length; i++) {
-      res[products[i].Id] = [];
-    }
-
-    return res;
-  };
-
-  const arrangeItemByProduct = () => {
-    const initObj = makeObj();
-
-    for (const property in initObj) {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].ParentId == property) {
-          initObj[property].push(data[i].Id);
-        }
-      }
-    }
-
-    return initObj;
-  };
-
-  const renderItem = () => {
-    const obj = arrangeItemByProduct();
-    const res = [];
-    for (const property in obj) {
-      res.push(property);
-      for (let i = 0; i < obj[property].length; i++) {
-        res.push(obj[property][i]);
-      }
-    }
-
-    return res;
-  };
   const handleDelete = (id) => {
     setDataCost(dataCost.filter((item) => item.id !== id));
   };
