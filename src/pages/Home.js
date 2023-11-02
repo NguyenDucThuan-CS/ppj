@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import data from "../data/data.json";
 import "./Home.css";
 import CustomModal from "./Modal";
-
+export const renderItemById = (id) => {
+  return data[Number(id) - 1];
+};
 const Home = () => {
   const [dataCost, setDataCost] = useState([]);
 
@@ -49,9 +51,7 @@ const Home = () => {
     return initObj;
   };
 
-  const renderItemById = (id) => {
-    return data[Number(id) - 1];
-  };
+ 
 
   const renderItem = () => {
     const obj = arrangeItemByProduct();
