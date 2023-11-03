@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { actDeleteItem } from "../redux/modules/action"
 
 const AddNew = () => {
-  
     const history = useNavigate()
     const dispatch = useDispatch();
     const dataRender = useSelector((state) => state.itemReducer.data);
@@ -17,7 +16,7 @@ const AddNew = () => {
       return masterData[Number(id) - 1];
     };
     return  <div className="container">
-    <div className="d-flex flex-row gap-5">
+    <div className="d-flex flex-row gap-5 table-bordered">
       <div style={{ width: "120%" }}>
         <div className="btn btn-primary mb-2" onClick={() => history('/new')}>
           Add new

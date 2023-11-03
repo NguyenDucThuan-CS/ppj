@@ -60,9 +60,10 @@ const Edit = () => {
       (item) => item.Id >= parseInt(sourceID) && item.Id < parseInt(desID)
     );
 
-    const cost = filterData.reduce((total, item) => {
-      if (item.cost !== undefined) return total + item.cost;
-    }, 0);
+    let cost = 0;
+    for (let i = 0; i < filterData.length; i++) {
+      if (filterData[i].cost) cost = cost + filterData[i].cost;
+    }
 
     return cost;
   };
@@ -138,9 +139,16 @@ const Edit = () => {
             })}
           </select>
         </div>
+        <div></div>
       </div>
       <div>
-        <table className="table table-striped-columns">
+        <div className="d-flex justify-content-end mb-2">
+          <Button variant="primary" onClick={handleClick}>
+            Save
+          </Button>
+        </div>
+
+        <table className="table table-striped-columns table-bordered">
           <thead>
             <tr>
               <th scope="col">No.</th>
@@ -167,11 +175,7 @@ const Edit = () => {
           </tbody>
         </table>
       </div>
-      <div>
-        <Button variant="primary" onClick={handleClick}>
-          Save
-        </Button>
-      </div>
+
       <p className="text-end fw-bold p-2">Total Cost: {renderCost()}</p>
     </div>
   );

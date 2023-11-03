@@ -18,7 +18,6 @@ const AddItem = () => {
     return masterData.filter((item) => item.TypeName === "Product");
   };
   
-  
   const renderItemById = (id) => {
     return masterData[Number(id) - 1];
   };

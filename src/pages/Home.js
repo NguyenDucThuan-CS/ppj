@@ -30,14 +30,14 @@ const Home = () => {
     return true;
   };
   const handleClose = () => {
-    setShow(false);
     setId("")
-    setId("")
+    setName("")
     setType("")
+    setShow(false);
   };
 
   const handleClick = () => {
-    setShow(false)
+    handleClose()
     if(mode === 'NEW') {
       dispatch(actAddData({
         ParentId: id,
@@ -67,21 +67,21 @@ const Home = () => {
     <div className="container">
       <div className="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between">
         <div>
-          <Button variant="primary">Add Product</Button>
+          
         </div>
         <div className="d-flex flex-row gap-2">
           <Button variant="primary" onClick={() => history("/add")}>
-            Add with modal
+            Add item page with modal
           </Button>
           <Button variant="primary" onClick={() => history("/add-new")}>
-            Add with newpage
+          Add item page with new page
           </Button>
         </div>
       </div>
-
+       <h2 className="font-weight-bold">Thư viện</h2>
       <div className="d-flex flex-row gap-5">
-        <table className="table table-striped-columns ">
-          <thead>
+        <table className="table table-striped-columns table-bordered">
+          <thead className="thead-dark">
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Item</th>

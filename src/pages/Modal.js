@@ -59,7 +59,7 @@ const CustomModal = ({
 
     cloneDataCost[index].sourceID = sourceID;
     cloneDataCost[index].desID = desID;
-    cloneDataCost[index].cost = cost;
+    cloneDataCost[index].cost = renderCost();
 
     setDataCost(cloneDataCost);
   };
@@ -92,9 +92,10 @@ const CustomModal = ({
       (item) => item.Id >= parseInt(sourceID) && item.Id < parseInt(desID)
     );
 
-    const cost = filterData.reduce((total, item) => {
-      if (item.cost !== undefined) return total + item.cost;
-    }, 0);
+    let cost = 0;
+    for (let i = 0; i < filterData.length; i++) {
+      if (filterData[i].cost) cost = cost + filterData[i].cost;
+    }
 
     return cost;
   };
@@ -168,6 +169,11 @@ const CustomModal = ({
           </div>
         </Modal.Header>
         <Modal.Body>
+          <div className="d-flex justify-content-end mb-2">
+            <Button variant="primary" onClick={handleClick}>
+              Save
+            </Button>
+          </div>
           <table className="table table-striped-columns">
             <thead>
               <tr>
@@ -197,11 +203,7 @@ const CustomModal = ({
             </tbody>
           </table>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClick}>
-            Save
-          </Button>
-        </Modal.Footer>
+        <Modal.Footer></Modal.Footer>
         <p className="text-end fw-bold p-2">Total Cost: {renderCost()}</p>
       </Modal>
     </>
